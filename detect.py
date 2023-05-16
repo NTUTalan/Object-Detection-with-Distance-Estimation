@@ -103,7 +103,7 @@ def detect(save_img=False):
 
         # Apply NMS
         # pred = non_max_suppression(pred, opt.conf_thres, opt.iou_thres, classes=opt.classes, agnostic=opt.agnostic_nms)
-        pred = non_max_suppression(pred, 0.25, 0.45, classes=None, agnostic=False)
+        pred = non_max_suppression(pred, 0.5, 0.45, classes=None, agnostic=False)
         t3 = time_synchronized()
 
         # Apply Classifier

@@ -74,15 +74,15 @@ def plot_one_box_modify(x, img, color=None, label=None, line_thickness=3):
     h = int(x[3]) - int(x[1])
     cv2.rectangle(img, c1, c2, color, thickness=tl, lineType=cv2.LINE_AA)
     ### Caculate Distance and plot
-    distance = (2 * 3.14 * 180) / (w+ h * 360) * 1000 + 3 ### Distance measuring in Inch 
-    cv2.putText(img, str("{:.2f} Inches".format(distance)), c2, cv2.FONT_HERSHEY_SIMPLEX, 1, color, 2, cv2.LINE_AA)
-
     if label:
         tf = max(tl - 1, 1)  # font thickness
+        distance = str("\"{:.2f} Inches\"".format((2 * 3.14 * 180) / ( w + h * 360) * 1000 + 3)) ### Distance measuring in Inch 
         t_size = cv2.getTextSize(label, 0, fontScale=tl / 3, thickness=tf)[0]
-        c2 = c1[0] + t_size[0], c1[1] - t_size[1] - 3
+        d_size = cv2.getTextSize(distance, 0, fontScale=tl / 3, thickness=tf)[0]
+        c2 = c1[0] + t_size[0] + d_size[0], c1[1] - t_size[1] - 3
         cv2.rectangle(img, c1, c2, color, -1, cv2.LINE_AA)  # filled
         cv2.putText(img, label, (c1[0], c1[1] - 2), 0, tl / 3, [225, 255, 255], thickness=tf, lineType=cv2.LINE_AA)
+        cv2.putText(img, distance, (c1[0] + t_size[0] + 1, c1[1] - 2), 0, tl / 3, [225, 255, 255], thickness=tf, lineType=cv2.LINE_AA)
 
 def plot_one_box_PIL(box, img, color=None, label=None, line_thickness=None):
     img = Image.fromarray(img)
