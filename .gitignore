@@ -1,5 +1,6 @@
 cfg/yolov7.yaml
 test.mp4
+test.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
