@@ -1,7 +1,7 @@
 import pickle as pk
 import torch
 import argparse
-
+from detect import detect_yolov7
 # test = pk.load(open('pallete', 'rb'))
 
 # print(test)
@@ -29,5 +29,6 @@ if __name__ == '__main__':
     parser.add_argument('--exist-ok', action='store_true', help='existing project/name ok, do not increment')
     parser.add_argument('--no-trace', action='store_true', help='don`t trace model')
     opt = parser.parse_args()
-    print(opt)
+    detect_yolov7()
+
     #check_requirements(exclude=('pycocotools', 'thop'))
