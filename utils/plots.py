@@ -76,7 +76,8 @@ def plot_one_box_modify(x, img, color=None, label=None, line_thickness=3):
     ### Caculate Distance and plot
     if label:
         tf = max(tl - 1, 1)  # font thickness
-        distance = str("\"{:.2f} Inches\"".format((2 * 3.14 * 180) / ( w + h * 360) * 1000 + 3)) ### Distance measuring in Inch 
+        # distance = str("\"{:.2f} Inches\"".format((2 * 3.14 * 180) / ( w + h * 360) * 1000 + 3)) ### Distance measuring in Inch 
+        distance = str("\"{:.2f} Meters\"".format(512 * 1.8 / h)) ### 目前使用手機計算
         t_size = cv2.getTextSize(label, 0, fontScale=tl / 3, thickness=tf)[0]
         d_size = cv2.getTextSize(distance, 0, fontScale=tl / 3, thickness=tf)[0]
         c2 = c1[0] + t_size[0] + d_size[0], c1[1] - t_size[1] - 3

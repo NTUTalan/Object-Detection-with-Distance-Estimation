@@ -103,8 +103,8 @@ class Detector():
 def detect(save_img=False):
     # source, weights, view_img, save_txt, imgsz, trace = opt.source, opt.weights, opt.view_img, opt.save_txt, opt.img_size, not opt.no_trace
     # view_img: 使用Webcam時需要
-    source = 'test.mp4'
-    weights = 'last.pt'
+    source = 'test2.mp4'
+    weights = 'weights.pt'
     imgsz = 640
     save_txt = ''
     # save_img = not opt.nosave and not source.endswith('.txt')  # save inference images
@@ -274,3 +274,6 @@ def detect(save_img=False):
         #print(f"Results saved to {save_dir}{s}")
 
     print(f'Done. ({time.time() - t0:.3f}s)')
+
+if __name__ == '__main__':
+    detect()
