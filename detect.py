@@ -99,7 +99,8 @@ class Detector():
 
                 # Write results
                 for *xyxy, conf, cls in reversed(det):
-                    label = f'{self.names[int(cls)]} {conf:.2f}'
+                    # label = f'{self.names[int(cls)]} {conf:.2f}'
+                    label = f'{self.names[int(cls)]}'
                     plot_one_box_modify(xyxy, im0, label=label, color=self.colors[int(cls)], line_thickness=2)
                 return im0
     
@@ -197,12 +198,9 @@ def detect(save_img=False):
         # Apply Classifier
         if classify:
             pred = apply_classifier(pred, modelc, img, im0s)
-        print(pred)
-        print(enumerate(pred))
+            
         # Process detections
         for i, det in enumerate(pred):  # detections per image
-            print(i)
-            print(det)
             if webcam:  # batch_size >= 1
                 p, s, im0, frame = path[i], '%g: ' % i, im0s[i].copy(), dataset.count
             else:
@@ -234,7 +232,6 @@ def detect(save_img=False):
                     #     plot_one_box(xyxy, im0, label=label, color=colors[int(cls)], line_thickness=1)
 
                     label = f'{names[int(cls)]} {conf:.2f}'
-                    # print(xyxy)
                     plot_one_box_modify(xyxy, im0, label=label, color=colors[int(cls)], line_thickness=2)
 
             # Print time (inference + NMS)
