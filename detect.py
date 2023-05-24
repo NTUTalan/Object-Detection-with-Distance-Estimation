@@ -23,7 +23,10 @@ class Detector():
         
         # Initiallize
         set_logging()
-        self.device = select_device('0')
+        if(torch.cuda.is_available()):
+            self.device = select_device('0')
+        else:
+            self.device = select_device('cpu')
         self.half = self.device.type != 'cpu'  # half precision only supported on CUDA
     
         # Load model
