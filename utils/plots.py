@@ -80,7 +80,7 @@ def plot_one_box_modify(x, img, color=None, label=None, line_thickness=3):
         tf = max(tl - 1, 1)  # font thickness
         # distance = str("\"{:.2f} Inches\"".format((2 * 3.14 * 180) / ( w + h * 360) * 1000 + 3)) ### Distance measuring in Inch 
         try:
-            distance = str("\"{:.2f} Meters\"".format(512 * object_real_height[label] / h)) ### 目前使用手機計算
+            distance = str("{:.2f} Meters".format(512 * object_real_height[label] / h)) ### 目前使用手機計算
         except:
             distance =  ''
         t_size = cv2.getTextSize(label, 0, fontScale=tl / 3, thickness=tf)[0]
