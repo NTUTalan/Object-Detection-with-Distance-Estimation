@@ -14,36 +14,143 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(800, 600)
+        MainWindow.resize(1017, 703)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.button_stop = QtWidgets.QPushButton(self.centralwidget)
-        self.button_stop.setGeometry(QtCore.QRect(650, 480, 111, 41))
+        self.button_stop.setGeometry(QtCore.QRect(220, 500, 191, 51))
+        font = QtGui.QFont()
+        font.setFamily("Agency FB")
+        font.setPointSize(24)
+        self.button_stop.setFont(font)
+        self.button_stop.setStyleSheet("\n"
+"color:white;\n"
+"background-color:black;\n"
+"border:2px solid gray;")
         self.button_stop.setObjectName("button_stop")
         self.button_pause = QtWidgets.QPushButton(self.centralwidget)
-        self.button_pause.setGeometry(QtCore.QRect(520, 480, 111, 41))
+        self.button_pause.setGeometry(QtCore.QRect(410, 500, 191, 51))
+        font = QtGui.QFont()
+        font.setFamily("Agency FB")
+        font.setPointSize(18)
+        self.button_pause.setFont(font)
+        self.button_pause.setStyleSheet("\n"
+"color:white;\n"
+"background-color:black;\n"
+"border:2px solid gray;")
         self.button_pause.setObjectName("button_pause")
         self.button_play = QtWidgets.QPushButton(self.centralwidget)
-        self.button_play.setGeometry(QtCore.QRect(390, 480, 111, 41))
+        self.button_play.setGeometry(QtCore.QRect(30, 500, 191, 51))
+        font = QtGui.QFont()
+        font.setFamily("Agency FB")
+        font.setPointSize(24)
+        self.button_play.setFont(font)
+        self.button_play.setStyleSheet("\n"
+"color:white;\n"
+"background-color:black;\n"
+"\n"
+"color:white;\n"
+"border:2px solid gray;\n"
+"\n"
+"")
         self.button_play.setObjectName("button_play")
         self.button_openfile = QtWidgets.QPushButton(self.centralwidget)
-        self.button_openfile.setGeometry(QtCore.QRect(70, 370, 111, 41))
+        self.button_openfile.setGeometry(QtCore.QRect(106, 590, 111, 41))
         self.button_openfile.setObjectName("button_openfile")
         self.label_videoframe = QtWidgets.QLabel(self.centralwidget)
-        self.label_videoframe.setGeometry(QtCore.QRect(80, 50, 641, 271))
-        self.label_videoframe.setStyleSheet("")
+        self.label_videoframe.setGeometry(QtCore.QRect(36, 40, 941, 461))
+        self.label_videoframe.setStyleSheet("QLabel{\n"
+"    border-radius: 2px;\n"
+"    background-color :gainsboro\n"
+"\n"
+"\n"
+"}")
+        self.label_videoframe.setText("")
         self.label_videoframe.setObjectName("label_videoframe")
         self.label_framecnt = QtWidgets.QLabel(self.centralwidget)
-        self.label_framecnt.setGeometry(QtCore.QRect(520, 380, 221, 21))
-        self.label_framecnt.setStyleSheet("")
+        self.label_framecnt.setGeometry(QtCore.QRect(46, 50, 221, 21))
+        self.label_framecnt.setStyleSheet("QLabel{\n"
+"    border-radius: 5px;\n"
+"    background-color :gainsboro\n"
+"\n"
+"}")
         self.label_framecnt.setObjectName("label_framecnt")
         self.label_filepath = QtWidgets.QLabel(self.centralwidget)
-        self.label_filepath.setGeometry(QtCore.QRect(80, 480, 221, 21))
-        self.label_filepath.setStyleSheet("")
+        self.label_filepath.setGeometry(QtCore.QRect(736, 610, 221, 21))
+        self.label_filepath.setStyleSheet("QLabel{\n"
+"    border-radius: 5px;\n"
+"    background-color :gainsboro\n"
+"\n"
+"}")
         self.label_filepath.setObjectName("label_filepath")
+        self.slider_videoframe = QtWidgets.QSlider(self.centralwidget)
+        self.slider_videoframe.setGeometry(QtCore.QRect(246, 590, 691, 51))
+        self.slider_videoframe.setOrientation(QtCore.Qt.Horizontal)
+        self.slider_videoframe.setObjectName("slider_videoframe")
+        self.label = QtWidgets.QLabel(self.centralwidget)
+        self.label.setGeometry(QtCore.QRect(-4, -6, 1021, 691))
+        font = QtGui.QFont()
+        font.setFamily("Agency FB")
+        font.setPointSize(16)
+        self.label.setFont(font)
+        self.label.setStyleSheet("QLabel{\n"
+"    background-color:grey;\n"
+"\n"
+"}")
+        self.label.setText("")
+        self.label.setObjectName("label")
+        self.button_rd = QtWidgets.QPushButton(self.centralwidget)
+        self.button_rd.setGeometry(QtCore.QRect(600, 500, 191, 51))
+        font = QtGui.QFont()
+        font.setFamily("Agency FB")
+        font.setPointSize(18)
+        self.button_rd.setFont(font)
+        self.button_rd.setStyleSheet("\n"
+"color:white;\n"
+"background-color:black;\n"
+"border:2px solid gray;")
+        self.button_rd.setObjectName("button_rd")
+        self.button_warning = QtWidgets.QPushButton(self.centralwidget)
+        self.button_warning.setGeometry(QtCore.QRect(790, 500, 191, 51))
+        font = QtGui.QFont()
+        font.setFamily("Agency FB")
+        font.setPointSize(18)
+        self.button_warning.setFont(font)
+        self.button_warning.setStyleSheet("\n"
+"color:white;\n"
+"background-color:black;\n"
+"border:2px solid gray;")
+        self.button_warning.setObjectName("button_warning")
+        self.button_shot = QtWidgets.QPushButton(self.centralwidget)
+        self.button_shot.setGeometry(QtCore.QRect(820, 50, 151, 61))
+        font = QtGui.QFont()
+        font.setFamily("Agency FB")
+        font.setPointSize(24)
+        self.button_shot.setFont(font)
+        self.button_shot.setStyleSheet("\n"
+"color:white;\n"
+"background-color:black;\n"
+"\n"
+"color:white;\n"
+"border:2px solid gray;\n"
+"\n"
+"")
+        self.button_shot.setObjectName("button_shot")
+        self.label_filepath.raise_()
+        self.label.raise_()
+        self.label_videoframe.raise_()
+        self.button_stop.raise_()
+        self.button_pause.raise_()
+        self.button_play.raise_()
+        self.button_openfile.raise_()
+        self.label_framecnt.raise_()
+        self.slider_videoframe.raise_()
+        self.button_rd.raise_()
+        self.button_warning.raise_()
+        self.button_shot.raise_()
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 25))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1017, 25))
         self.menubar.setObjectName("menubar")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
@@ -56,13 +163,15 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.button_stop.setText(_translate("MainWindow", "Stop"))
-        self.button_pause.setText(_translate("MainWindow", "Pause"))
-        self.button_play.setText(_translate("MainWindow", "Play"))
+        self.button_stop.setText(_translate("MainWindow", "⟳"))
+        self.button_pause.setText(_translate("MainWindow", "||"))
+        self.button_play.setText(_translate("MainWindow", "▶️"))
         self.button_openfile.setText(_translate("MainWindow", "OpenFile"))
-        self.label_videoframe.setText(_translate("MainWindow", "video_player"))
         self.label_framecnt.setText(_translate("MainWindow", "current_frame/total_frame"))
         self.label_filepath.setText(_translate("MainWindow", "file path:"))
+        self.button_rd.setText(_translate("MainWindow", "RD"))
+        self.button_warning.setText(_translate("MainWindow", "⚠️"))
+        self.button_shot.setText(_translate("MainWindow", "📷"))
 
 
 if __name__ == "__main__":

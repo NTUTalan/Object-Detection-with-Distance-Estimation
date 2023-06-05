@@ -11,7 +11,6 @@ import os
 from UI import Ui_MainWindow
 from video_controller import video_controller
 
-
 class MainWindow_controller(QMainWindow):
     def __init__(self):
         super().__init__() # in python3, super(Class, self).xxx = super().xxx
@@ -31,6 +30,18 @@ class MainWindow_controller(QMainWindow):
         self.ui.button_play.clicked.connect(self.video_controller.play) # connect to function()
         self.ui.button_stop.clicked.connect(self.video_controller.stop)
         self.ui.button_pause.clicked.connect(self.video_controller.pause)
+    def init_video_info(self):
+        self.ui.slider_videoframe.setRange(0, self.video_total_frame_count-1)
+        self.ui.slider_videoframe.valueChanged.connect(self.getslidervalue)
+
+    def __get_frame_from_frame_no(self, frame_no):
+        self.setslidervalue(frame_no)
+
+    def getslidervalue(self):
+        self.current_frame_no = self.ui.slider_videoframe.value()
+
+    def setslidervalue(self, value):
+        self.ui.slider_videoframe.setValue(self.current_frame_no)
 
 
 
