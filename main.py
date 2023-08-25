@@ -23,13 +23,16 @@ class MainWindow_controller(QMainWindow):
 
     def open_file(self):
         filename, filetype = QFileDialog.getOpenFileName(self, "Open file Window", "./", "Video Files(*.mp4 *.avi)") # start path        
-        self.video_path = filename
-        self.video_controller = video_controller(video_path=self.video_path,
-                                                 ui=self.ui)
-        self.ui.label_filepath.setText(f"video path: {self.video_path}")
-        self.ui.button_play.clicked.connect(self.video_controller.play) # connect to function()
-        self.ui.button_stop.clicked.connect(self.video_controller.stop)
-        self.ui.button_pause.clicked.connect(self.video_controller.pause)
+        if filename:
+            self.video_path = filename
+            self.video_controller = video_controller(video_path=self.video_path,
+                                                    ui=self.ui)
+            self.ui.label_filepath.setText(f"video path: {self.video_path}")
+            self.ui.button_play.clicked.connect(self.video_controller.play) # connect to function()
+            self.ui.button_stop.clicked.connect(self.video_controller.stop)
+            self.ui.button_pause.clicked.connect(self.video_controller.pause)
+        else:
+            print("no file selected")
     def init_video_info(self):
         self.ui.slider_videoframe.setRange(0, self.video_total_frame_count-1)
         self.ui.slider_videoframe.valueChanged.connect(self.getslidervalue)
