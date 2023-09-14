@@ -26,10 +26,10 @@ if torch.cuda.is_available():
 
 def letterbox_image(img, inp_dim):
     '''resize image with unchanged aspect ratio using padding'''
-    img_w, img_h = img.shape[1], img.shape[0]
+    imgWidth, imgHeight = img.shape[1], img.shape[0]
     w, h = inp_dim
-    new_w = int(img_w * min(w/img_w, h/img_h))
-    new_h = int(img_h * min(w/img_w, h/img_h))
+    new_w = int(imgWidth * min(w/imgWidth, h/imgHeight))
+    new_h = int(imgHeight * min(w/imgWidth, h/imgHeight))
     resized_image = cv2.resize(img, (new_w,new_h), interpolation = cv2.INTER_CUBIC)
     canvas = np.full((inp_dim[1], inp_dim[0], 3), 128)
     canvas[(h-new_h)//2:(h-new_h)//2 + new_h,(w-new_w)//2:(w-new_w)//2 + new_w,  :] = resized_image
@@ -41,7 +41,7 @@ def load_classes(namesfile):
     names = fp.read().split("\n")[:-1]
     return names
 
-def prep_image(img, inp_dim):
+def PreproccessImage(img, inp_dim):
     """
     Prepare image for inputting to the neural network.
     Returns a Variable
@@ -83,6 +83,7 @@ class ObjectDetection:
     def main(self):
         q = queue.Queue()
         while True:
+            # 從Queue裡取得Image進行處理
             def frame_render(queue_from_cam):
                 # frame = self.cap.read() 
                 # If you capture stream using opencv (cv2.VideoCapture()) the use the following line
@@ -97,7 +98,7 @@ class ObjectDetection:
             fps = FPS().start() 
             
             try:
-                img, orig_im, dim = prep_image(frame, 160)
+                img, orig_im, dim = PreproccessImage(frame, 160)
                 
                 im_dim = torch.FloatTensor(dim).repeat(1,2)
                 if self.CUDA:                            #### If you have a gpu properly installed then it will run on the gpu

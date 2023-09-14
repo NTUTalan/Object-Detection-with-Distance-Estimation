@@ -11,7 +11,7 @@ from models.experimental import attempt_load
 from utils.datasets import LoadStreams, LoadImages, letterbox
 from utils.general import check_img_size, check_requirements, check_imshow, non_max_suppression, apply_classifier, \
     scale_coords, xyxy2xywh, strip_optimizer, set_logging, increment_path
-from utils.plots import plot_one_box_modify
+from utils.custom_utils import PlotBoxWithDistance
 from utils.torch_utils import select_device, load_classifier, time_synchronized, TracedModel
 
 class Detector():
@@ -40,9 +40,10 @@ class Detector():
 
         if self.half:
             self.model.half()  # to FP16
-        
-    def predict(self, _img):
 
+    #Returns: 圖片, 偵測資料    
+    def predict(self, _img):
+        result = []
         # Run inference
         if self.device.type != 'cpu':
             self.model(torch.zeros(1, 3, self.imgsz, self.imgsz).to(self.device).type_as(next(self.model.parameters())))  # run once
@@ -101,8 +102,10 @@ class Detector():
                 for *xyxy, conf, cls in reversed(det):
                     # label = f'{self.names[int(cls)]} {conf:.2f}'
                     label = f'{self.names[int(cls)]}'
-                    plot_one_box_modify(xyxy, im0, label=label, color=self.colors[int(cls)], line_thickness=2)
+                    car_info = PlotBoxWithDistance(xyxy, im0, label=label, color=self.colors[int(cls)], line_thickness=2)
+                    result.append(car_info)
                 return im0
+                return (im0, [])
     
 def detect(save_img=False):
     # source, weights, view_img, save_txt, imgsz, trace = opt.source, opt.weights, opt.view_img, opt.save_txt, opt.img_size, not opt.no_trace
