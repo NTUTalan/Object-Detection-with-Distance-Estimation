@@ -102,10 +102,10 @@ class Detector():
                 for *xyxy, conf, cls in reversed(det):
                     # label = f'{self.names[int(cls)]} {conf:.2f}'
                     label = f'{self.names[int(cls)]}'
-                    car_info = CustomPlotBox(xyxy, im0, label=label, color=self.colors[int(cls)], line_thickness=2)
+                    car_info = CustomPlotBox(xyxy, im0, label=label, box_color=self.colors[int(cls)], line_thickness=2)
                     result.append(car_info)
-                return im0
-                return (im0, [])
+                #return im0
+                return (im0, result)
     
 def detect(save_img=False):
     # source, weights, view_img, save_txt, imgsz, trace = opt.source, opt.weights, opt.view_img, opt.save_txt, opt.img_size, not opt.no_trace
@@ -235,7 +235,7 @@ def detect(save_img=False):
                     #     plot_one_box(xyxy, im0, label=label, color=colors[int(cls)], line_thickness=1)
 
                     label = f'{names[int(cls)]} {conf:.2f}'
-                    plot_one_box_modify(xyxy, im0, label=label, color=colors[int(cls)], line_thickness=2)
+                    # plot_one_box_modify(xyxy, im0, label=label, color=colors[int(cls)], line_thickness=2)
 
             # Print time (inference + NMS)
             print(f'{s}Done. ({(1E3 * (t2 - t1)):.1f}ms) Inference, ({(1E3 * (t3 - t2)):.1f}ms) NMS')
