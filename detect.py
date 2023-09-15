@@ -11,7 +11,7 @@ from models.experimental import attempt_load
 from utils.datasets import LoadStreams, LoadImages, letterbox
 from utils.general import check_img_size, check_requirements, check_imshow, non_max_suppression, apply_classifier, \
     scale_coords, xyxy2xywh, strip_optimizer, set_logging, increment_path
-from utils.custom_utils import PlotBoxWithDistance
+from utils.custom_utils import CustomPlotBox
 from utils.torch_utils import select_device, load_classifier, time_synchronized, TracedModel
 
 class Detector():
@@ -102,7 +102,7 @@ class Detector():
                 for *xyxy, conf, cls in reversed(det):
                     # label = f'{self.names[int(cls)]} {conf:.2f}'
                     label = f'{self.names[int(cls)]}'
-                    car_info = PlotBoxWithDistance(xyxy, im0, label=label, color=self.colors[int(cls)], line_thickness=2)
+                    car_info = CustomPlotBox(xyxy, im0, label=label, color=self.colors[int(cls)], line_thickness=2)
                     result.append(car_info)
                 return im0
                 return (im0, [])
