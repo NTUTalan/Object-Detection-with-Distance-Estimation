@@ -41,8 +41,16 @@ class Detector():
         if self.half:
             self.model.half()  # to FP16
 
+    def AdjustGamma(self, img, gamma: float = 1.0):
+        result = np.array(255 * (img / 255) ** gamma, dtype="uint8")
+        return result
+    
     #Returns: 圖片, 偵測資料    
     def predict(self, _img):
+        _img = self.AdjustGamma(_img, 0.2)
+        cv2.imshow("test", _img)
+        cv2.waitKey(0)
+        
         result = []
         # Run inference
         if self.device.type != 'cpu':
@@ -52,17 +60,15 @@ class Detector():
 
         # Padded resize
         img = letterbox(_img, self.imgsz, stride=self.stride)[0]
-
         # Convert
         img = img[:, :, ::-1].transpose(2, 0, 1)  # BGR to RGB, to 3x416x416
         img = np.ascontiguousarray(img)
-
+        
         img = torch.from_numpy(img).to(self.device)
         img = img.half() if self.half else img.float()  # uint8 to fp16/32
         img /= 255.0  # 0 - 255 to 0.0 - 1.0
         if img.ndimension() == 3:
             img = img.unsqueeze(0)
-
         # Warmup
         if self.device.type != 'cpu' and (old_img_b != img.shape[0] or old_img_h != img.shape[2] or old_img_w != img.shape[3]):
             old_img_b = img.shape[0]
@@ -80,19 +86,17 @@ class Detector():
         # Apply NMS
         # pred = non_max_suppression(pred, opt.conf_thres, opt.iou_thres, classes=opt.classes, agnostic=opt.agnostic_nms)
         pred = non_max_suppression(pred, 0.5, 0.45, classes=None, agnostic=False)
-
         # Process detections
         for i, det in enumerate(pred):  # detections per image
             if self.webcam:  # batch_size >= 1
                 s, im0 = '%g: ' % i, _img[i].copy()
             else:
                 s, im0 = '', _img
-
             gn = torch.tensor(im0.shape)[[1, 0, 1, 0]]  # normalization gain whwh
             if len(det):
                 # Rescale boxes from img_size to im0 size
                 det[:, :4] = scale_coords(img.shape[2:], det[:, :4], im0.shape).round()
-
+                # im0 = self.AdjustGamma(im0, 0.2)
                 # Print results
                 for c in det[:, -1].unique():
                     n = (det[:, -1] == c).sum()  # detections per class
