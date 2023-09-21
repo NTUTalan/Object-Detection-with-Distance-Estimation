@@ -44,9 +44,9 @@ class video_controller(object):
         self.vc.set(1, frame_no)
         ret, frame = self.vc.read()
         self.ui.label_framecnt.setText(f"frame number: {frame_no}/{self.video_total_frame_count}")
-        img, infos = self.detector.predict(frame)
-        # img = self.detector.predict(frame)
-        print(infos)
+        # img, infos = self.detector.predict(frame)
+        img = self.detector.predict(frame)
+        # print(infos)
         return img
 
     def __update_label_frame(self, frame):       

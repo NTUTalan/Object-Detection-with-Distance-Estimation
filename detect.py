@@ -48,9 +48,6 @@ class Detector():
     #Returns: 圖片, 偵測資料    
     def predict(self, _img):
         _img = self.AdjustGamma(_img, 0.2)
-        cv2.imshow("test", _img)
-        cv2.waitKey(0)
-        
         result = []
         # Run inference
         if self.device.type != 'cpu':
@@ -82,9 +79,11 @@ class Detector():
         with torch.no_grad():   # Calculating gradients would cause a GPU memory leak
             # pred = model(img, augment=opt.augment)[0]
             pred = self.model(img, augment=False)[0]
-
         # Apply NMS
         # pred = non_max_suppression(pred, opt.conf_thres, opt.iou_thres, classes=opt.classes, agnostic=opt.agnostic_nms)
+        # 0.5: confidence thres
+        # 0.45: iou_thres
+        print()
         pred = non_max_suppression(pred, 0.5, 0.45, classes=None, agnostic=False)
         # Process detections
         for i, det in enumerate(pred):  # detections per image
@@ -92,6 +91,8 @@ class Detector():
                 s, im0 = '%g: ' % i, _img[i].copy()
             else:
                 s, im0 = '', _img
+            print(det)
+            print(det.shape)
             gn = torch.tensor(im0.shape)[[1, 0, 1, 0]]  # normalization gain whwh
             if len(det):
                 # Rescale boxes from img_size to im0 size
@@ -108,8 +109,8 @@ class Detector():
                     label = f'{self.names[int(cls)]}'
                     car_info = CustomPlotBox(xyxy, im0, label=label, box_color=self.colors[int(cls)], line_thickness=2)
                     result.append(car_info)
-                #return im0
-                return (im0, result)
+                return im0
+                # return (im0, result)
     
 def detect(save_img=False):
     # source, weights, view_img, save_txt, imgsz, trace = opt.source, opt.weights, opt.view_img, opt.save_txt, opt.img_size, not opt.no_trace
