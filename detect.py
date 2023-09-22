@@ -1,3 +1,4 @@
+# -*- coding: UTF-8 -*-
 import argparse
 import time
 from pathlib import Path
@@ -13,6 +14,7 @@ from utils.general import check_img_size, check_requirements, check_imshow, non_
     scale_coords, xyxy2xywh, strip_optimizer, set_logging, increment_path
 from utils.custom_utils import CustomPlotBox
 from utils.torch_utils import select_device, load_classifier, time_synchronized, TracedModel
+from utils.plots import plot_one_box
 
 class Detector():
     def __init__(self, source='test.mp4', weights='weights.pt', imgsz=640, webcam=False):
@@ -47,7 +49,7 @@ class Detector():
     
     #Returns: 圖片, 偵測資料    
     def predict(self, _img):
-        _img = self.AdjustGamma(_img, 0.2)
+        # _img = self.AdjustGamma(_img, 0.2)
         result = []
         # Run inference
         if self.device.type != 'cpu':
@@ -83,7 +85,7 @@ class Detector():
         # pred = non_max_suppression(pred, opt.conf_thres, opt.iou_thres, classes=opt.classes, agnostic=opt.agnostic_nms)
         # 0.5: confidence thres
         # 0.45: iou_thres
-        print()
+        # print()
         pred = non_max_suppression(pred, 0.5, 0.45, classes=None, agnostic=False)
         # Process detections
         for i, det in enumerate(pred):  # detections per image
@@ -111,11 +113,13 @@ class Detector():
                     result.append(car_info)
                 return im0
                 # return (im0, result)
-    
+def AdjustGamma(img, gamma: float = 1.0):
+        result = np.array(255 * (img / 255) ** gamma, dtype="uint8")
+        return result    
 def detect(save_img=False):
     # source, weights, view_img, save_txt, imgsz, trace = opt.source, opt.weights, opt.view_img, opt.save_txt, opt.img_size, not opt.no_trace
     # view_img: 使用Webcam時需要
-    source = 'test2.mp4'
+    source = '../testVideo/test.mp4'
     weights = 'weights.pt'
     imgsz = 640
     save_txt = ''
@@ -130,7 +134,7 @@ def detect(save_img=False):
     # Initialize
     set_logging()
     # device = select_device(opt.device)
-    device = select_device('0')
+    device = select_device('cpu')
     half = device.type != 'cpu'  # half precision only supported on CUDA
 
     # Load model
@@ -167,7 +171,7 @@ def detect(save_img=False):
     # Get names and colors
     names = model.module.names if hasattr(model, 'module') else model.names
     colors = [[random.randint(0, 255) for _ in range(3)] for _ in names]
-
+    print(colors)
     # Run inference
     if device.type != 'cpu':
         model(torch.zeros(1, 3, imgsz, imgsz).to(device).type_as(next(model.parameters())))  # run once
@@ -176,6 +180,7 @@ def detect(save_img=False):
 
     t0 = time.time()
     for path, img, im0s, vid_cap in dataset:
+        # img = AdjustGamma(img, 0.2)
         img = torch.from_numpy(img).to(device)
         img = img.half() if half else img.float()  # uint8 to fp16/32
         img /= 255.0  # 0 - 255 to 0.0 - 1.0
@@ -238,9 +243,8 @@ def detect(save_img=False):
                     # if save_img or view_img:  # Add bbox to image
                     #     label = f'{names[int(cls)]} {conf:.2f}'
                     #     plot_one_box(xyxy, im0, label=label, color=colors[int(cls)], line_thickness=1)
-
                     label = f'{names[int(cls)]} {conf:.2f}'
-                    # plot_one_box_modify(xyxy, im0, label=label, color=colors[int(cls)], line_thickness=2)
+                    plot_one_box(xyxy, im0, label=label, color=colors[int(cls)], line_thickness=1)
 
             # Print time (inference + NMS)
             print(f'{s}Done. ({(1E3 * (t2 - t1)):.1f}ms) Inference, ({(1E3 * (t3 - t2)):.1f}ms) NMS')
