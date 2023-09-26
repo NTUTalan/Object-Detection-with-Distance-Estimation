@@ -17,7 +17,6 @@ from UI import Ui_MainWindow
 
 class myMainWindow(Ui_MainWindow):
     def __init__(self, parent=None):
-        
         Ui_MainWindow.__init__(self)
         #Ui_MainWindow.__init__(self)
         #uic.loadUi("untitled.ui",self)
@@ -26,9 +25,8 @@ class myMainWindow(Ui_MainWindow):
         self.makeConnections()
         self.setWindowTitle("Video Player")
 
-        # 获取当前时间
+        # 獲取當前時間
         current_time = datetime.datetime.now()
-        # 格式化时间为字符串，例如："2023-09-26_14-30-15"
         self.formatted_time = current_time.strftime("%Y-%m-%d_%H-%M-%S")
         
         
@@ -51,12 +49,29 @@ class myMainWindow(Ui_MainWindow):
     def makeConnections(self):
         self.button_openfile.clicked.connect(self.onActionAbrirTriggered)
         self.button_play.clicked.connect(self.mediaPlayer.play)
+        #self.button_play.clicked.connect(self.enable_left_warning)
         self.button_pause.clicked.connect(self.mediaPlayer.pause)
+        #self.button_pause.clicked.connect(self.disable_left_warning)
         self.button_stop.clicked.connect(self.mediaPlayer.stop)
 
         self.button_shot.clicked.connect(self.capture_picture)
         #影片進度條更新
         self.mediaPlayer.mediaStatusChanged.connect(self.onMediaStatusChanged)
+
+    #左、中、右警示圖亮
+    def enable_left_warning(self):
+        self.warning_left.setEnabled(True)
+    def enable_middle_warning(self):
+        self.warning_middle.setEnabled(True)
+    def enable_right_warning(self):
+        self.warning_right.setEnabled(True)
+    #左、中、右警示圖暗
+    def disable_left_warning(self):
+        self.warning_left.setEnabled(False)
+    def disable_middle_warning(self):
+        self.warning_middle.setEnabled(False)
+    def disable_right_warning(self):
+        self.warning_right.setEnabled(False)
         
 
     def onActionAbrirTriggered(self):
@@ -66,7 +81,9 @@ class myMainWindow(Ui_MainWindow):
         if filepath == "":
             return
         self.mediaPlayer.setMedia(QMediaContent(QUrl(filepath)))
+        
         self.mediaPlayer.play()
+
 
     def updateSlider(self,position):
         self.slider_videoframe.setValue(position)
@@ -86,7 +103,6 @@ class myMainWindow(Ui_MainWindow):
         screen = QScreen.grabWindow(QApplication.primaryScreen(), self.winId())
         image = QPixmap(screen)
 
-        # 生成新的文件名，例如："2023-09-26_14-30-15.jpg"
         new_filename = str(self.count)+".png"
         self.count+=1
 
@@ -94,13 +110,12 @@ class myMainWindow(Ui_MainWindow):
         if not os.path.exists(output_folder):
             os.makedirs(output_folder)
 
-        # 生成新的文件名，例如："2023-09-26_14-30-15.jpg"，保存在"image"文件夹中
         new_filename = os.path.join(output_folder, new_filename)
 
-        # 保存图像
+        # 存圖
         image.save(new_filename)
 
-        print(f"图像已保存为: {new_filename}")
+        print(f"圖片已保存為: {new_filename}")
 
         
         
