@@ -46,9 +46,12 @@ def PlotBoxWithDistance(x, img, color=None, label=None, line_thickness=3):
         # distance = str("\"{:.2f} Inches\"".format((2 * 3.14 * 180) / ( w + h * 360) * 1000 + 3)) ### Distance measuring in Inch 
         try:
             distance = 512 * object_real_height[label] / h
+            if(distance == None):
+                distance = 0
             distance_str = str("{:.2f} Meters".format(distance)) ### 目前使用手機計算
         except:
-            distance =  ''
+            distance = 0
+            distance_str =  ''
         t_size = cv2.getTextSize(label, 0, fontScale=tl / 3, thickness=tf)[0]
         d_size = cv2.getTextSize(distance_str, 0, fontScale=tl / 3, thickness=tf)[0]
         c2 = c1[0] + t_size[0] + d_size[0], c1[1] - t_size[1] - 3

@@ -23,7 +23,7 @@ class myMainWindow(Ui_MainWindow):
         self.count=1
         self.setup()
         self.makeConnections()
-        self.setWindowTitle("Video Player")
+        self.setWindowTitle("Title")
 
         # 獲取當前時間
         current_time = datetime.datetime.now()
