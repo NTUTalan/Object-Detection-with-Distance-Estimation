@@ -63,9 +63,13 @@ def CustomPlotBox(x: list, img, label: str=None, box_color: list=None, line_thic
         tf = max(tl - 1, 1)  # font thickness
         distance = 512 * object_real_height[label] / height ### Distance measuring in Inch 
         try:
-            str_distance = str("{:.2f} Meters".format(distance)) ### 目前使用手機計算
+            distance = 512 * object_real_height[label] / h
+            if(distance == None):
+                distance = 0
+            distance_str = str("{:.2f} Meters".format(distance)) ### 目前使用手機計算
         except:
-            distance =  ''
+            distance = 0
+            distance_str =  ''
         t_size = cv2.getTextSize(label, 0, fontScale=tl / 3, thickness=tf)[0]
         d_size = cv2.getTextSize(str_distance, 0, fontScale=tl / 3, thickness=tf)[0]
         c2 = c1[0] + t_size[0] + d_size[0], c1[1] - t_size[1] - 3
