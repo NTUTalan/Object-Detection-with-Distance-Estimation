@@ -93,8 +93,6 @@ class Detector():
                 s, im0 = '%g: ' % i, _img[i].copy()
             else:
                 s, im0 = '', _img
-            print(det)
-            print(det.shape)
             gn = torch.tensor(im0.shape)[[1, 0, 1, 0]]  # normalization gain whwh
             if len(det):
                 # Rescale boxes from img_size to im0 size
@@ -171,7 +169,6 @@ def detect(save_img=False):
     # Get names and colors
     names = model.module.names if hasattr(model, 'module') else model.names
     colors = [[random.randint(0, 255) for _ in range(3)] for _ in names]
-    print(colors)
     # Run inference
     if device.type != 'cpu':
         model(torch.zeros(1, 3, imgsz, imgsz).to(device).type_as(next(model.parameters())))  # run once
@@ -247,7 +244,7 @@ def detect(save_img=False):
                     plot_one_box(xyxy, im0, label=label, color=colors[int(cls)], line_thickness=1)
 
             # Print time (inference + NMS)
-            print(f'{s}Done. ({(1E3 * (t2 - t1)):.1f}ms) Inference, ({(1E3 * (t3 - t2)):.1f}ms) NMS')
+            # print(f'{s}Done. ({(1E3 * (t2 - t1)):.1f}ms) Inference, ({(1E3 * (t3 - t2)):.1f}ms) NMS')
 
             cv2.imshow('Object Detection Window', im0)
             if(cv2.waitKey(1) & 0xFF == ord('q')):

@@ -1,10 +1,9 @@
 from PyQt5 import QtCore 
 from PyQt5.QtGui import QImage, QPixmap
 from PyQt5.QtCore import QTimer 
-
 from opencv_engine import opencv_engine
-
 from detect import Detector
+import numpy as np
 # videoplayer_state_dict = {
 #  "stop":0,   
 #  "play":1,
@@ -22,6 +21,8 @@ class video_controller(object):
         self.init_video_info()
         self.set_video_player()
         self.detector = Detector(source=self.video_path)
+        # 防止模型來不及回傳圖片結果
+        self.last_frame = None
 
     def init_video_info(self):
         videoinfo = opencv_engine.getvideoinfo(self.video_path)
@@ -37,8 +38,8 @@ class video_controller(object):
     def set_video_player(self):
         self.timer=QTimer() # init QTimer
         self.timer.timeout.connect(self.timer_timeout_job) # when timeout, do run one
-        # self.timer.start(1000//self.video_fps) # start Timer, here we set '1000ms//Nfps' while timeout one time
-        self.timer.start(1) # but if CPU can not decode as fast as fps, we set 1 (need decode time)
+        self.timer.start(int(1000 / self.video_fps)) # start Timer, here we set '1000ms//Nfps' while timeout one time
+        # self.timer.start(1) # but if CPU can not decode as fast as fps, we set 1 (need decode time)
 
     def __get_frame_from_frame_no(self, frame_no):
         self.vc.set(1, frame_no)
@@ -53,10 +54,14 @@ class video_controller(object):
         # img = self.detector.predict(frame)
         return frame
     
-    def __update_label_frame(self, frame):       
+    def __update_label_frame(self, frame):     
+        if frame is None:
+            frame = self.last_frame
         bytesPerline = 3 * self.video_width
         qimg = QImage(frame, self.video_width, self.video_height, bytesPerline, QImage.Format_RGB888).rgbSwapped()
+        self.last_frame = frame
         self.qpixmap = QPixmap.fromImage(qimg)
+        print("{}, {}, {}, {}, {}\n".format(self.qpixmap, self.qpixmap_fix_width, self.qpixmap_fix_height, frame, type(frame)))
 
         if self.qpixmap.width()/16 >= self.qpixmap.height()/9: # like 1600/16 > 90/9, height is shorter, align width
             self.qpixmap = self.qpixmap.scaledToWidth(self.qpixmap_fix_width)
