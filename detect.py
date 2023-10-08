@@ -110,7 +110,9 @@ class Detector():
                     car_info = CustomPlotBox(xyxy, im0, label=label, box_color=self.colors[int(cls)], line_thickness=2)
                     result.append(car_info)
                 return im0
-                # return (im0, result)
+                #return (im0, result)
+            else:
+                return im0
 def AdjustGamma(img, gamma: float = 1.0):
         result = np.array(255 * (img / 255) ** gamma, dtype="uint8")
         return result    

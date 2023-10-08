@@ -21,22 +21,22 @@ class MainWindow_controller(QMainWindow):
     def setup_control(self):
         self.ui.button_openfile.clicked.connect(self.open_file)    
     #左、中、右警示圖示隱藏
-    def enable_left_warning(self):
+    def disable_left_warning(self):
         self.warning_left.setHidden(True)
-    def enable_middle_warning(self):
+    def disable_middle_warning(self):
         self.warning_middle.setHidden(True)
-    def enable_right_warning(self):
+    def disable_right_warning(self):
         self.warning_right.setHidden(True)
     #左、中、右警示圖出現
-    def disable_left_warning(self):
+    def enable_left_warning(self):
         self.warning_left.setHidden(False)
-    def disable_middle_warning(self):
+    def enable_middle_warning(self):
         self.warning_middle.setHidden(False)
-    def disable_right_warning(self):
+    def enable_right_warning(self):
         self.warning_right.setHidden(False)     
 
     def open_file(self):
-        filename, filetype = QFileDialog.getOpenFileName(self, "Open file Window", "./", "Video Files(*.mp4 *.avi)") # start path        
+        filename, filetype = QFileDialog.getOpenFileName(self, "Open file Window", "./", "Video Files(*.mp4 *.avi *.mkv)") # start path        
         if filename:
             self.video_path = filename
             self.video_controller = video_controller(video_path=self.video_path,
