@@ -60,25 +60,27 @@ def CustomPlotBox(x: list, img, label: str=None, box_color: list=None, line_thic
 
     ### Caculate Distance and plot
     if label:
-        tf = max(tl - 1, 1)  # font thickness
-        distance = 512 * object_real_height[label] / height ### Distance measuring in Inch 
+        tf = max(tl - 1, 1)  # font thickness 
         try:
-            str_distance = str("{:.2f} Meters".format(distance)) ### 目前使用手機計算
+            distance = 512 * object_real_height[label] / height ### Distance measuring in Inch
+            if(distance == None):
+                distance = 0
+            distance_str = str("{:.2f} Meters".format(distance)) ### 目前使用手機計算
         except:
-            distance =  ''
+            distance = 0
+            distance_str =  ''
         t_size = cv2.getTextSize(label, 0, fontScale=tl / 3, thickness=tf)[0]
-        d_size = cv2.getTextSize(str_distance, 0, fontScale=tl / 3, thickness=tf)[0]
+        d_size = cv2.getTextSize(distance_str, 0, fontScale=tl / 3, thickness=tf)[0]
         c2 = c1[0] + t_size[0] + d_size[0], c1[1] - t_size[1] - 3
         cv2.rectangle(img, c1, c2, box_color, -1, cv2.LINE_AA)  # filled
         cv2.putText(img, label, (c1[0], c1[1] - 2), 0, tl / 3, [225, 255, 255], thickness=tf, lineType=cv2.LINE_AA)
-        cv2.putText(img, str_distance, (c1[0] + t_size[0] + 1, c1[1] - 2), 0, tl / 3, [225, 255, 255], thickness=tf, lineType=cv2.LINE_AA)
+        cv2.putText(img, distance_str, (c1[0] + t_size[0] + 1, c1[1] - 2), 0, tl / 3, [225, 255, 255], thickness=tf, lineType=cv2.LINE_AA)
         return (GetPosition(x, img_width), distance)
 
 def GetPosition(x: list, img_width: int):
     box_center_x = (int(x[2]) + int(x[0])) / 2
     left_bound = img_width / 3
     right_bound = img_width * 2 / 3
-    print(box_center_x > left_bound)
     if(box_center_x < left_bound):
         return "left"
     elif(box_center_x > right_bound):
