@@ -46,8 +46,8 @@ class video_controller(object):
         ret, frame = self.vc.read()
         self.ui.label_framecnt.setText(f"frame number: {frame_no}/{self.video_total_frame_count}")
         #img, infos = self.detector.predict(frame)
-        # img = self.detector.predict(frame)
-        return frame
+        img = self.detector.predict(frame)
+        return img
     
     def __get_next_frame(self):
         ret, frame = self.vc.read();
@@ -61,7 +61,6 @@ class video_controller(object):
         qimg = QImage(frame, self.video_width, self.video_height, bytesPerline, QImage.Format_RGB888).rgbSwapped()
         self.last_frame = frame
         self.qpixmap = QPixmap.fromImage(qimg)
-        print("{}, {}, {}, {}, {}\n".format(self.qpixmap, self.qpixmap_fix_width, self.qpixmap_fix_height, frame, type(frame)))
 
         if self.qpixmap.width()/16 >= self.qpixmap.height()/9: # like 1600/16 > 90/9, height is shorter, align width
             self.qpixmap = self.qpixmap.scaledToWidth(self.qpixmap_fix_width)
@@ -82,8 +81,8 @@ class video_controller(object):
         self.videoplayer_state = "pause"
 
     def timer_timeout_job(self):
-        frame = self.__get_next_frame()
-        self.__update_label_frame(self.detector.predict(frame))      
+        frame = self.__get_frame_from_frame_no(self.current_frame_no)
+        self.__update_label_frame(frame)
         if (self.videoplayer_state == "play"):
             # self.__update_label_frame(self.__get_next_frame())
             self.current_frame_no += 1
