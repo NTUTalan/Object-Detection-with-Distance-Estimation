@@ -45,8 +45,8 @@ class video_controller(object):
         self.vc.set(1, frame_no)
         ret, frame = self.vc.read()
         self.ui.label_framecnt.setText(f"frame number: {frame_no}/{self.video_total_frame_count}")
-        #img, infos = self.detector.predict(frame)
-        img = self.detector.predict(frame)
+        img, infos = self.detector.predict(frame)
+        self.warningUser(infos)
         return img
     
     def __get_next_frame(self):
@@ -92,3 +92,8 @@ class video_controller(object):
 
         if (self.videoplayer_state == "pause"):
             self.current_frame_no = self.current_frame_no
+
+    def warningUser(self, position):
+        self.ui.warning_left.setHidden(position[0])
+        self.ui.warning_middle.setHidden(position[1])
+        self.ui.warning_right.setHidden(position[2])

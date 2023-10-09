@@ -40,7 +40,7 @@ class MainWindow_controller(QMainWindow):
         if filename:
             self.video_path = filename
             self.video_controller = video_controller(video_path=self.video_path,
-                                                    ui=self.ui)
+                                                     ui=self.ui)
             self.ui.label_filepath.setText(f"video path: {self.video_path}")
             self.ui.button_play.clicked.connect(self.video_controller.play) # connect to function()
             self.ui.button_stop.clicked.connect(self.video_controller.stop)

@@ -47,7 +47,9 @@ class Detector():
         result = np.array(255 * (img / 255) ** gamma, dtype="uint8")
         return result
     
-    #Returns: 圖片, 偵測資料    
+    '''
+    Returns: 圖片, 偵測資料    
+    '''
     def predict(self, _img):
         # _img = self.AdjustGamma(_img, 0.2)
         result = []
@@ -74,26 +76,25 @@ class Detector():
             old_img_h = img.shape[2]
             old_img_w = img.shape[3]
             for i in range(3):
-                # model(img, augment=opt.augment)[0]
                 self.model(img, augment=False)[0]
-
         # Inference
         with torch.no_grad():   # Calculating gradients would cause a GPU memory leak
-            # pred = model(img, augment=opt.augment)[0]
             pred = self.model(img, augment=False)[0]
         # Apply NMS
-        # pred = non_max_suppression(pred, opt.conf_thres, opt.iou_thres, classes=opt.classes, agnostic=opt.agnostic_nms)
         # 0.5: confidence thres
         # 0.45: iou_thres
-        # print()
-        pred = non_max_suppression(pred, 0.5, 0.45, classes=None, agnostic=False)
-        # Process detections
+        pred = non_max_suppression(pred, 0.5, 0.45, classes=None, agnostic=False)   
+        return self.postProcessing(pred, _img, img)
+        
+
+    '''
+    Return: tuple -> (img, [])
+    Ex: (圖像, [left, center, right] => 0為警示, 1為不警示)
+    '''
+    def postProcessing(self, pred, ori_img, img):
+        position_arr = [1, 1, 1]
         for i, det in enumerate(pred):  # detections per image
-            if self.webcam:  # batch_size >= 1
-                s, im0 = '%g: ' % i, _img[i].copy()
-            else:
-                s, im0 = '', _img
-            gn = torch.tensor(im0.shape)[[1, 0, 1, 0]]  # normalization gain whwh
+            s, im0 = '', ori_img
             if len(det):
                 # Rescale boxes from img_size to im0 size
                 det[:, :4] = scale_coords(img.shape[2:], det[:, :4], im0.shape).round()
@@ -107,12 +108,11 @@ class Detector():
                 for *xyxy, conf, cls in reversed(det):
                     # label = f'{self.names[int(cls)]} {conf:.2f}'
                     label = f'{self.names[int(cls)]}'
-                    car_info = CustomPlotBox(xyxy, im0, label=label, box_color=self.colors[int(cls)], line_thickness=2)
-                    result.append(car_info)
-                return im0
-                #return (im0, result)
-            else:
-                return im0
+                    CustomPlotBox(pos_arr=position_arr, x=xyxy, img=im0, label=label, 
+                                  box_color=self.colors[int(cls)], 
+                                  line_thickness=2)
+        return (im0, position_arr)
+    
 def AdjustGamma(img, gamma: float = 1.0):
         result = np.array(255 * (img / 255) ** gamma, dtype="uint8")
         return result    
