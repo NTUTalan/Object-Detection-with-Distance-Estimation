@@ -1,5 +1,4 @@
 # Dataset utils and dataloaders
-
 import glob
 import logging
 import math
@@ -186,6 +185,36 @@ class LoadImages:  # for inference
             img0 = cv2.imread(path)  # BGR
             assert img0 is not None, 'Image Not Found ' + path
             #print(f'image {self.count}/{self.nf} {path}: ', end='')
+
+        # TEST HERE-----------------------------------------------------------------------------------
+        def AdjustGamma(img, gamma: float = 1.0):
+            # build a lookup table mapping the pixel values [0, 255] to
+	        # their adjusted gamma values
+            invGamma = 1.0 / gamma
+            table = np.array([((i / 255.0) ** invGamma) * 255 
+                          for i in np.arange(0, 256)]).astype("uint8")
+            img = cv2.LUT(img, table)
+            # sharp the image
+            img = SharpImage(img, 2)
+	        # apply gamma correction using the lookup table
+            return img
+        
+        def SharpImage(img, type=0):
+            if type == 0:
+                laplacian = cv2.Laplacian(img, cv2.CV_64F)
+                laplacian_scaled = cv2.normalize(laplacian, None, 0, 255, 
+                                                 cv2.NORM_MINMAX).astype("uint8")
+                return cv2.add(img, laplacian_scaled)
+            elif type == 1:
+                blur_img = cv2.GaussianBlur(img, (0, 0), 5)
+                usm = cv2.addWeighted(img, 1.5, blur_img, -0.5, 0)
+                return usm
+            elif type == 2:
+                img = cv2.Canny(img, 100, 200)
+                img = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
+                return img
+        img0 = AdjustGamma(img0, 1)
+        # --------------------------------------------------------------------------------------------
 
         # Padded resize
         img = letterbox(img0, self.img_size, stride=self.stride)[0]

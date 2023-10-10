@@ -44,15 +44,19 @@ class Detector():
             self.model.half()  # to FP16
 
     def AdjustGamma(self, img, gamma: float = 1.0):
-        result = np.array(255 * (img / 255) ** gamma, dtype="uint8")
-        return result
+        # build a lookup table mapping the pixel values [0, 255] to
+	    # their adjusted gamma values
+        invGamma = 1.0 / gamma
+        table = np.array([((i / 255.0) ** invGamma) * 255 
+                          for i in np.arange(0, 256)]).astype("uint8")
+	    # apply gamma correction using the lookup table
+        return cv2.LUT(img, table)
     
     '''
     Returns: 圖片, 偵測資料    
     '''
     def predict(self, _img):
         # _img = self.AdjustGamma(_img, 0.2)
-        result = []
         # Run inference
         if self.device.type != 'cpu':
             self.model(torch.zeros(1, 3, self.imgsz, self.imgsz).to(self.device).type_as(next(self.model.parameters())))  # run once
@@ -63,13 +67,13 @@ class Detector():
         img = letterbox(_img, self.imgsz, stride=self.stride)[0]
         # Convert
         img = img[:, :, ::-1].transpose(2, 0, 1)  # BGR to RGB, to 3x416x416
-        img = np.ascontiguousarray(img)
-        
+        img = np.ascontiguousarray(img)     
         img = torch.from_numpy(img).to(self.device)
         img = img.half() if self.half else img.float()  # uint8 to fp16/32
         img /= 255.0  # 0 - 255 to 0.0 - 1.0
         if img.ndimension() == 3:
             img = img.unsqueeze(0)
+
         # Warmup
         if self.device.type != 'cpu' and (old_img_b != img.shape[0] or old_img_h != img.shape[2] or old_img_w != img.shape[3]):
             old_img_b = img.shape[0]
@@ -77,9 +81,11 @@ class Detector():
             old_img_w = img.shape[3]
             for i in range(3):
                 self.model(img, augment=False)[0]
+
         # Inference
         with torch.no_grad():   # Calculating gradients would cause a GPU memory leak
             pred = self.model(img, augment=False)[0]
+
         # Apply NMS
         # 0.5: confidence thres
         # 0.45: iou_thres
@@ -114,12 +120,18 @@ class Detector():
         return (im0, position_arr)
     
 def AdjustGamma(img, gamma: float = 1.0):
-        result = np.array(255 * (img / 255) ** gamma, dtype="uint8")
-        return result    
+        # build a lookup table mapping the pixel values [0, 255] to
+	    # their adjusted gamma values
+        invGamma = 1.0 / gamma
+        table = np.array([((i / 255.0) ** invGamma) * 255 
+                          for i in np.arange(0, 256)]).astype("uint8")
+	    # apply gamma correction using the lookup table
+        return cv2.LUT(img, table)  
+  
 def detect(save_img=False):
     # source, weights, view_img, save_txt, imgsz, trace = opt.source, opt.weights, opt.view_img, opt.save_txt, opt.img_size, not opt.no_trace
     # view_img: 使用Webcam時需要
-    source = '../testVideo/test.mp4'
+    source = '../testVideo/test1.mp4'
     weights = 'weights.pt'
     imgsz = 640
     save_txt = ''
@@ -179,7 +191,6 @@ def detect(save_img=False):
 
     t0 = time.time()
     for path, img, im0s, vid_cap in dataset:
-        # img = AdjustGamma(img, 0.2)
         img = torch.from_numpy(img).to(device)
         img = img.half() if half else img.float()  # uint8 to fp16/32
         img /= 255.0  # 0 - 255 to 0.0 - 1.0
