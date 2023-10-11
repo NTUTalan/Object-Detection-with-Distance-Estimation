@@ -123,14 +123,6 @@ class Ui_MainWindow(object):
 "\n"
 "")
         self.button_play.setObjectName("button_play")
-        self.label_filepath_2 = QtWidgets.QLabel(self.centralwidget)
-        self.label_filepath_2.setGeometry(QtCore.QRect(170, 720, 281, 31))
-        self.label_filepath_2.setStyleSheet("QLabel{\n"
-"    border-radius: 5px;\n"
-"    background-color :gainsboro\n"
-"\n"
-"}")
-        self.label_filepath_2.setObjectName("label_filepath_2")
         self.button_openfile = QtWidgets.QPushButton(self.centralwidget)
         self.button_openfile.setGeometry(QtCore.QRect(170, 660, 111, 41))
         self.button_openfile.setObjectName("button_openfile")
@@ -143,14 +135,14 @@ class Ui_MainWindow(object):
         self.warning_left.setPixmap(QtGui.QPixmap("../../../../warning2.png"))
         self.warning_left.setObjectName("warning_left")
         self.warning_middle = QtWidgets.QLabel(self.centralwidget)
-        self.warning_left.setHidden(True)
+        self.warning_middle.setHidden(True)
         self.warning_middle.setEnabled(True)
         self.warning_middle.setGeometry(QtCore.QRect(510, 0, 150, 150))
         self.warning_middle.setText("")
         self.warning_middle.setPixmap(QtGui.QPixmap("../../../../warning2.png"))
         self.warning_middle.setObjectName("warning_middle")
         self.warning_right = QtWidgets.QLabel(self.centralwidget)
-        self.warning_left.setHidden(True)
+        self.warning_right.setHidden(True)
         self.warning_right.setEnabled(True)
         self.warning_right.setGeometry(QtCore.QRect(860, 0, 150, 150))
         self.warning_right.setText("")
@@ -175,7 +167,6 @@ class Ui_MainWindow(object):
         self.button_rd.raise_()
         self.button_pause.raise_()
         self.button_play.raise_()
-        self.label_filepath_2.raise_()
         self.button_openfile.raise_()
         self.button_stop.raise_()
         self.label_videoframe.raise_()
@@ -211,7 +202,6 @@ class Ui_MainWindow(object):
         self.button_rd.setText(_translate("MainWindow", "RD"))
         self.button_pause.setText(_translate("MainWindow", "||"))
         self.button_play.setText(_translate("MainWindow", "▶️"))
-        self.label_filepath_2.setText(_translate("MainWindow", "  file path:"))
         self.button_openfile.setText(_translate("MainWindow", "OpenFile"))
         self.menuArchive.setTitle(_translate("MainWindow", "Archive"))
         self.actionAbrir.setText(_translate("MainWindow", "Abrir"))

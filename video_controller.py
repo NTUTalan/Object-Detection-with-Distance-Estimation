@@ -32,6 +32,8 @@ class video_controller(object):
         self.video_width = videoinfo["width"]
         self.video_height = videoinfo["height"] 
 
+        self.ui.slider_videoframe.setRange(0, self.video_total_frame_count-1)
+        self.ui.slider_videoframe.valueChanged.connect(self.getslidervalue)
 
         # self.ui.slider_videoframe
 
@@ -42,6 +44,7 @@ class video_controller(object):
         # self.timer.start(1) # but if CPU can not decode as fast as fps, we set 1 (need decode time)
 
     def __get_frame_from_frame_no(self, frame_no):
+        self.setslidervalue(frame_no)
         self.vc.set(1, frame_no)
         ret, frame = self.vc.read()
         self.ui.label_framecnt.setText(f"frame number: {frame_no}/{self.video_total_frame_count}")
@@ -53,6 +56,9 @@ class video_controller(object):
         ret, frame = self.vc.read();
         # img = self.detector.predict(frame)
         return frame
+    
+    def set_current_frame_no(self, frame_no):
+        self.vc.set(1, frame_no) # bottleneck
     
     def __update_label_frame(self, frame):     
         if frame is None:
@@ -97,3 +103,10 @@ class video_controller(object):
         self.ui.warning_left.setHidden(position[0])
         self.ui.warning_middle.setHidden(position[1])
         self.ui.warning_right.setHidden(position[2])
+
+    def getslidervalue(self):
+        self.current_frame_no = self.ui.slider_videoframe.value()
+        self.set_current_frame_no(self.current_frame_no)
+
+    def setslidervalue(self, value):
+        self.ui.slider_videoframe.setValue(self.current_frame_no)
