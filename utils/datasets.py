@@ -195,7 +195,7 @@ class LoadImages:  # for inference
                           for i in np.arange(0, 256)]).astype("uint8")
             img = cv2.LUT(img, table)
             # sharp the image
-            img = SharpImage(img, 2)
+            img = SharpImage(img, 0)
 	        # apply gamma correction using the lookup table
             return img
         
@@ -204,10 +204,12 @@ class LoadImages:  # for inference
                 laplacian = cv2.Laplacian(img, cv2.CV_64F)
                 laplacian_scaled = cv2.normalize(laplacian, None, 0, 255, 
                                                  cv2.NORM_MINMAX).astype("uint8")
+                cv2.imshow("title", laplacian_scaled)
                 return cv2.add(img, laplacian_scaled)
             elif type == 1:
-                blur_img = cv2.GaussianBlur(img, (0, 0), 5)
-                usm = cv2.addWeighted(img, 1.5, blur_img, -0.5, 0)
+                blur_img = cv2.GaussianBlur(img, (11, 11), 5)
+                edge = cv2.subtract(img, blur_img)
+                usm = cv2.add(img, edge)
                 return usm
             elif type == 2:
                 img = cv2.Canny(img, 100, 200)

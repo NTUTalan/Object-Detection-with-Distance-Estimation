@@ -12,7 +12,7 @@ from models.experimental import attempt_load
 from utils.datasets import LoadStreams, LoadImages, letterbox
 from utils.general import check_img_size, check_requirements, check_imshow, non_max_suppression, apply_classifier, \
     scale_coords, xyxy2xywh, strip_optimizer, set_logging, increment_path
-from utils.custom_utils import CustomPlotBox
+from utils.custom_utils import CustomPlotBox, DivideImg
 from utils.torch_utils import select_device, load_classifier, time_synchronized, TracedModel
 from utils.plots import plot_one_box
 
@@ -40,6 +40,7 @@ class Detector():
         self.names = self.model.module.names if hasattr(self.model, 'module') else self.model.names
         self.colors = [[random.randint(0, 255) for _ in range(3)] for _ in self.names]
 
+        self.nightMode = True
         if self.half:
             self.model.half()  # to FP16
 
@@ -53,9 +54,11 @@ class Detector():
         return cv2.LUT(img, table)
     
     '''
-    Returns: 圖片, 偵測資料    
+    Returns: 偵測資料    
     '''
     def predict(self, _img):
+        # if self.nightMode:
+            # _img = NightPreifix(_img)
         # _img = self.AdjustGamma(_img, 0.2)
         # Run inference
         if self.device.type != 'cpu':
@@ -98,6 +101,7 @@ class Detector():
     Ex: (圖像, [left, center, right] => 0為警示, 1為不警示)
     '''
     def postProcessing(self, pred, ori_img, img):
+        DivideImg(ori_img)
         position_arr = [1, 1, 1]
         for i, det in enumerate(pred):  # detections per image
             s, im0 = '', ori_img
@@ -118,7 +122,13 @@ class Detector():
                                   box_color=self.colors[int(cls)], 
                                   line_thickness=2)
         return (im0, position_arr)
-    
+
+def NightPreifix(img):
+    laplacian = cv2.Laplacian(img, cv2.CV_64F)
+    laplacian_scaled = cv2.normalize(laplacian, None, 0, 255, 
+                                     cv2.NORM_MINMAX).astype("uint8")
+    return cv2.add(img, laplacian_scaled)
+
 def AdjustGamma(img, gamma: float = 1.0):
         # build a lookup table mapping the pixel values [0, 255] to
 	    # their adjusted gamma values
@@ -131,7 +141,7 @@ def AdjustGamma(img, gamma: float = 1.0):
 def detect(save_img=False):
     # source, weights, view_img, save_txt, imgsz, trace = opt.source, opt.weights, opt.view_img, opt.save_txt, opt.img_size, not opt.no_trace
     # view_img: 使用Webcam時需要
-    source = '../testVideo/test1.mp4'
+    source = '../TestVideos/test1.mp4'
     weights = 'weights.pt'
     imgsz = 640
     save_txt = ''
@@ -146,7 +156,10 @@ def detect(save_img=False):
     # Initialize
     set_logging()
     # device = select_device(opt.device)
-    device = select_device('cpu')
+    if(torch.cuda.is_available()):
+        device = select_device('0')
+    else:
+        device = select_device('cpu')
     half = device.type != 'cpu'  # half precision only supported on CUDA
 
     # Load model

@@ -4,6 +4,7 @@ from PyQt5.QtCore import QTimer
 from opencv_engine import opencv_engine
 from detect import Detector
 import numpy as np
+from postprocess import PostProcessor
 # videoplayer_state_dict = {
 #  "stop":0,   
 #  "play":1,
@@ -21,6 +22,7 @@ class video_controller(object):
         self.init_video_info()
         self.set_video_player()
         self.detector = Detector(source=self.video_path)
+        self.postprocessor = PostProcessor()
         # 防止模型來不及回傳圖片結果
         self.last_frame = None
 

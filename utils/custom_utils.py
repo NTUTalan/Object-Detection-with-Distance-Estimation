@@ -51,15 +51,6 @@ def CustomPlotBox(pos_arr: list, x: list, img, label: str=None, box_color: list=
     height = int(x[3]) - int(x[1])
     cv2.rectangle(img, c1, c2, box_color, thickness=tl, lineType=cv2.LINE_AA)
 
-    # test area-------------------------------------------------------------------------------------------------------------------------------
-    lb_start = [img_width // 3, 0]
-    lb_end = [img_width // 3, img_height]
-    rb_start = [img_width * 2 // 3, 0]
-    rb_end = [img_width * 2 // 3, img_height]
-    cv2.line(img, lb_start, lb_end, [153, 255, 255], 2)
-    cv2.line(img, rb_start, rb_end, [153, 255, 255], 2)
-    # ----------------------------------------------------------------------------------------------------------------------------------------
-
     ### Caculate Distance and plot
     if label:
         tf = max(tl - 1, 1)  # font thickness 
@@ -86,6 +77,16 @@ def CustomPlotBox(pos_arr: list, x: list, img, label: str=None, box_color: list=
             elif position == RIGHT:
                 pos_arr[2] = 0
 
+def DivideImg(img):
+    img_width = img.shape[1]
+    img_height = img.shape[0]
+    lb_start = [img_width // 3, 0]
+    lb_end = [img_width // 3, img_height]
+    rb_start = [img_width * 2 // 3, 0]
+    rb_end = [img_width * 2 // 3, img_height]
+    cv2.line(img, lb_start, lb_end, [153, 255, 255], 2)
+    cv2.line(img, rb_start, rb_end, [153, 255, 255], 2)
+    
 def GetPosition(x: list, img_width: int):
     box_center_x = (int(x[2]) + int(x[0])) / 2
     left_bound = img_width / 3
