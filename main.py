@@ -2,6 +2,8 @@ from PyQt5 import QtCore
 # from PyQt5.QtGui import QImage, QPixmap
 from PyQt5.QtWidgets import QMainWindow, QFileDialog
 from PyQt5 import QtWidgets
+from PyQt5.QtWidgets import QApplication
+import datetime
 # from PyQt5.QtCore import QThread, pyqtSignal
 
 import time
@@ -42,7 +44,8 @@ class MainWindow_controller(QMainWindow):
         self.ui.button_openfile.clicked.connect(self.open_file)    
         self.ui.button_rd.clicked.connect(self.openroadlanedetect) 
         self.ui.button_warning.clicked.connect(self.opennightdetect) 
-        
+        self.ui.button_shot.clicked.connect(self.save_screenshot)
+
     #左、中、右警示圖示隱藏
     def disable_left_warning(self):
         self.warning_left.setHidden(True)
@@ -96,6 +99,13 @@ class MainWindow_controller(QMainWindow):
         else:
             self.ui.button_warning.setStyleSheet(initial_style)
         self.opennight = not self.opennight
+
+    def save_screenshot(self):
+        current_time = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        # 檔名弄成時間
+        screenshot_file = f"{current_time}.png"
+        screenshot = QApplication.primaryScreen().grabWindow(self.winId())
+        screenshot.save(screenshot_file)
 
 
 
