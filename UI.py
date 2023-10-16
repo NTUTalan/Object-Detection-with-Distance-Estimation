@@ -184,7 +184,6 @@ class Ui_MainWindow(object):
         self.actionAbrir.setObjectName("actionAbrir")
         self.menuArchive.addAction(self.actionAbrir)
         self.menubar.addAction(self.menuArchive.menuAction())
-
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 

@@ -4,7 +4,9 @@ from PyQt5.QtCore import QTimer
 from opencv_engine import opencv_engine
 from detect import Detector
 import numpy as np
-from postprocess import PostProcessor
+import cv2
+from shapely.geometry import LineString, Polygon
+from road_lane_dec import RoadLaneDetect
 # videoplayer_state_dict = {
 #  "stop":0,   
 #  "play":1,
@@ -22,7 +24,7 @@ class video_controller(object):
         self.init_video_info()
         self.set_video_player()
         self.detector = Detector(source=self.video_path)
-        self.postprocessor = PostProcessor()
+        self.roadLaneDetector = RoadLaneDetect()
         # 防止模型來不及回傳圖片結果
         self.last_frame = None
 
@@ -50,7 +52,9 @@ class video_controller(object):
         self.vc.set(1, frame_no)
         ret, frame = self.vc.read()
         self.ui.label_framecnt.setText(f"frame number: {frame_no}/{self.video_total_frame_count}")
+        polygon, lines = self.roadLaneDetector.detect(frame)
         img, infos = self.detector.predict(frame)
+        img = self.PostRoadLane(img, lines, polygon)
         self.warningUser(infos)
         return img
     
@@ -89,17 +93,37 @@ class video_controller(object):
         self.videoplayer_state = "pause"
 
     def timer_timeout_job(self):
-        frame = self.__get_frame_from_frame_no(self.current_frame_no)
-        self.__update_label_frame(frame)
-        if (self.videoplayer_state == "play"):
-            # self.__update_label_frame(self.__get_next_frame())
-            self.current_frame_no += 1
+        if(self.current_frame_no != self.video_total_frame_count):
+            frame = self.__get_frame_from_frame_no(self.current_frame_no)
+            self.__update_label_frame(frame)
+            if (self.videoplayer_state == "play"):
+                # self.__update_label_frame(self.__get_next_frame())
+                self.current_frame_no += 1
 
-        if (self.videoplayer_state == "stop"):
-            self.current_frame_no = 0
+            if (self.videoplayer_state == "stop"):
+                self.current_frame_no = 0
 
-        if (self.videoplayer_state == "pause"):
-            self.current_frame_no = self.current_frame_no
+            if (self.videoplayer_state == "pause"):
+                self.current_frame_no = self.current_frame_no
+
+    def PostRoadLane(self, img, merged_lines, polygon):
+        height, width = img.shape[:2]
+
+        # 檢查車道線是否與 ROI 區域相交，如果是，則顯示警告文字
+        for line in merged_lines:
+            x1, y1, x2, y2 = line[0]
+            line_coords = LineString([(x1, y1), (x2, y2)])
+            if polygon.intersects(line_coords):
+                cv2.putText(img, "Warning", (10, height - 10), cv2.FONT_HERSHEY_SIMPLEX, 5, (0, 0, 255), 8)
+
+        # 繪製車道線
+        line_img = np.zeros_like(img)
+        for line in merged_lines:
+            x1, y1, x2, y2 = line[0]
+            cv2.line(line_img, (x1, y1), (x2, y2), (0, 255, 0), 5)
+
+        # 合併偵測結果和原始影片
+        return cv2.addWeighted(img, 1, line_img, 1, 0)
 
     def warningUser(self, position):
         self.ui.warning_left.setHidden(position[0])
