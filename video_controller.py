@@ -53,8 +53,9 @@ class video_controller(object):
         ret, frame = self.vc.read()
         self.ui.label_framecnt.setText(f"frame number: {frame_no}/{self.video_total_frame_count}")
         polygon, lines = self.roadLaneDetector.detect(frame)
-        img, infos = self.detector.predict(frame)
-        img = self.PostRoadLane(img, lines, polygon)
+        img, infos = self.detector.predict(frame, self.ui.nightMode)
+        if self.ui.rdMode:
+            img = self.PostRoadLane(img, lines, polygon)
         self.warningUser(infos)
         return img
     
@@ -106,14 +107,20 @@ class video_controller(object):
             if (self.videoplayer_state == "pause"):
                 self.current_frame_no = self.current_frame_no
 
-    def PostRoadLane(self, img, merged_lines, polygon):
+    def PostRoadLane(self, img, merged_lines, bottom_roi):
+
         height, width = img.shape[:2]
 
+        # 新增中下方矩形 ROI 區域
+        cv2.polylines(img, [bottom_roi], isClosed=True, color=(0, 0, 255), thickness=6)
+        # 將 ROI 定義為多邊形
+        roi_polygon = Polygon(bottom_roi[0])
+        
         # 檢查車道線是否與 ROI 區域相交，如果是，則顯示警告文字
         for line in merged_lines:
             x1, y1, x2, y2 = line[0]
             line_coords = LineString([(x1, y1), (x2, y2)])
-            if polygon.intersects(line_coords):
+            if roi_polygon.intersects(line_coords):
                 cv2.putText(img, "Warning", (10, height - 10), cv2.FONT_HERSHEY_SIMPLEX, 5, (0, 0, 255), 8)
 
         # 繪製車道線

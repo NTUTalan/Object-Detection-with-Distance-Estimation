@@ -92,6 +92,7 @@ class MainWindow_controller(QMainWindow):
         else:
             self.ui.button_rd.setStyleSheet(initial_style)
         self.openrd = not self.openrd
+        self.ui.rdMode = self.openrd
     
     def opennightdetect(self):
         if self.opennight == False:
@@ -99,6 +100,7 @@ class MainWindow_controller(QMainWindow):
         else:
             self.ui.button_warning.setStyleSheet(initial_style)
         self.opennight = not self.opennight
+        self.ui.nightMode = self.opennight
 
     def save_screenshot(self):
         current_time = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
@@ -108,6 +110,7 @@ class MainWindow_controller(QMainWindow):
         screenshot.save(screenshot_file)
 
 
+    
 
 # start.py
 if __name__ == '__main__':

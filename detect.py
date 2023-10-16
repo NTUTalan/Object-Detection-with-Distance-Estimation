@@ -56,10 +56,10 @@ class Detector():
     '''
     Returns: 偵測資料    
     '''
-    def predict(self, _img):
-        # if self.nightMode:
-            # _img = NightPreifix(_img)
-        # _img = self.AdjustGamma(_img, 0.2)
+    def predict(self, _img, nightmode=False):
+        if nightmode:
+            _img = NightPreifix(_img)
+            
         # Run inference
         if self.device.type != 'cpu':
             self.model(torch.zeros(1, 3, self.imgsz, self.imgsz).to(self.device).type_as(next(self.model.parameters())))  # run once
@@ -124,6 +124,8 @@ class Detector():
         return (im0, position_arr)
 
 def NightPreifix(img):
+    # img = AdjustGamma(img, 2)
+    # img = cv2.medianBlur(img, 7) 
     laplacian = cv2.Laplacian(img, cv2.CV_64F)
     laplacian_scaled = cv2.normalize(laplacian, None, 0, 255, 
                                      cv2.NORM_MINMAX).astype("uint8")
@@ -141,7 +143,7 @@ def AdjustGamma(img, gamma: float = 1.0):
 def detect(save_img=False):
     # source, weights, view_img, save_txt, imgsz, trace = opt.source, opt.weights, opt.view_img, opt.save_txt, opt.img_size, not opt.no_trace
     # view_img: 使用Webcam時需要
-    source = '../TestVideos/test1.mp4'
+    source = './DistanceMeasure/16-remake.jpg'
     weights = 'weights.pt'
     imgsz = 640
     save_txt = ''
@@ -266,8 +268,11 @@ def detect(save_img=False):
                     # if save_img or view_img:  # Add bbox to image
                     #     label = f'{names[int(cls)]} {conf:.2f}'
                     #     plot_one_box(xyxy, im0, label=label, color=colors[int(cls)], line_thickness=1)
-                    label = f'{names[int(cls)]} {conf:.2f}'
-                    plot_one_box(xyxy, im0, label=label, color=colors[int(cls)], line_thickness=1)
+                    label = f'{names[int(cls)]}'
+                    # plot_one_box(xyxy, im0, label=label, color=colors[int(cls)], line_thickness=1)
+                    CustomPlotBox(pos_arr=[1, 1, 1], x=xyxy, img=im0, label=label, 
+                                  box_color=colors[int(cls)], 
+                                  line_thickness=2)
 
             # Print time (inference + NMS)
             # print(f'{s}Done. ({(1E3 * (t2 - t1)):.1f}ms) Inference, ({(1E3 * (t3 - t2)):.1f}ms) NMS')
@@ -305,6 +310,7 @@ def detect(save_img=False):
                     vid_writer.write(im0)
             '''
     print(f'Done. ({time.time() - t0:.3f}s)')
+    cv2.waitKey(0)
 
 if __name__ == '__main__':
     detect()
