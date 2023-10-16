@@ -50,12 +50,12 @@ def CustomPlotBox(pos_arr: list, x: list, img, label: str=None, box_color: list=
     c1, c2 = (int(x[0]), int(x[1])), (int(x[2]), int(x[3])) #左上、右下
     height = int(x[3]) - int(x[1])
     cv2.rectangle(img, c1, c2, box_color, thickness=tl, lineType=cv2.LINE_AA)
-
     ### Caculate Distance and plot
     if label:
         tf = max(tl - 1, 1)  # font thickness 
         try:
-            distance = 512 * object_real_height[label] / height ### Distance measuring in Inch
+            distance = 2070 * object_real_height[label] / height ### Distance measuring in Inch
+
             if(distance == None):
                 distance = 0
             distance_str = str("{:.2f} Meters".format(distance)) ### 目前使用手機計算
@@ -68,7 +68,7 @@ def CustomPlotBox(pos_arr: list, x: list, img, label: str=None, box_color: list=
         cv2.rectangle(img, c1, c2, box_color, -1, cv2.LINE_AA)  # filled
         cv2.putText(img, label, (c1[0], c1[1] - 2), 0, tl / 3, [225, 255, 255], thickness=tf, lineType=cv2.LINE_AA)
         cv2.putText(img, distance_str, (c1[0] + t_size[0] + 1, c1[1] - 2), 0, tl / 3, [225, 255, 255], thickness=tf, lineType=cv2.LINE_AA)
-        if(distance < 4):
+        if(distance < 37):
             position = GetPosition(x, img_width)
             if position == LEFT:
                 pos_arr[0] = 0

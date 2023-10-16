@@ -215,7 +215,6 @@ class LoadImages:  # for inference
                 img = cv2.Canny(img, 100, 200)
                 img = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
                 return img
-        img0 = AdjustGamma(img0, 1)
         # --------------------------------------------------------------------------------------------
 
         # Padded resize

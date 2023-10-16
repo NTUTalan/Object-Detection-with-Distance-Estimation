@@ -66,7 +66,6 @@ class RoadLaneDetect():
         height, width = frame.shape[:2]
         roi_vertices = [(0, height), (width, height), (width, height // 2), (0, height // 2)]
         roi_edges = self.region_of_interest(edges, np.array([roi_vertices], np.int32))
-        cv2.imshow('edge',roi_edges)
 
         # 新增中下方矩形 ROI 區域
         bottom_roi = np.array([[(width//4, height-50),(width//2, height *3//4), ((width*3)//4, height-50)]], np.int32)
@@ -83,30 +82,4 @@ class RoadLaneDetect():
 
         # 合併虛線
         merged_lines = self.merge_lines(filtered_lines)
-
-    
-
-        # 檢查車道線是否與 ROI 區域相交，如果是，則顯示警告文字
-        for line in merged_lines:
-            x1, y1, x2, y2 = line[0]
-            line_coords = LineString([(x1, y1), (x2, y2)])
-            if roi_polygon.intersects(line_coords):
-                cv2.putText(frame, "Warning", (10, height - 10), cv2.FONT_HERSHEY_SIMPLEX, 5, (0, 0, 255), 8)
-
-        # 繪製車道線
-        line_img = np.zeros_like(frame)
-        for line in merged_lines:
-            x1, y1, x2, y2 = line[0]
-            cv2.line(line_img, (x1, y1), (x2, y2), (0, 255, 0), 5)
-
-        # 合併偵測結果和原始影片
-        result = cv2.addWeighted(frame, 1, line_img, 1, 0)
-
-        # 調整視窗大小
-        resized_result = cv2.resize(result, (800, 600))
-
-        # 顯示結果
-        cv2.imshow('Lane Detection', resized_result)
-
-        # if cv2.waitKey(1) & 0xFF == ord('q'):
-        #     break
+        return roi_polygon, merged_lines
