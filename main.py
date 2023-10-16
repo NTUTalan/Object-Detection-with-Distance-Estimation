@@ -89,6 +89,7 @@ class MainWindow_controller(QMainWindow):
         else:
             self.ui.button_rd.setStyleSheet(initial_style)
         self.openrd = not self.openrd
+        self.ui.rdMode = self.openrd
     
     def opennightdetect(self):
         if self.opennight == False:
@@ -96,8 +97,7 @@ class MainWindow_controller(QMainWindow):
         else:
             self.ui.button_warning.setStyleSheet(initial_style)
         self.opennight = not self.opennight
-
-
+        self.ui.nightMode = self.opennight
 
 # start.py
 if __name__ == '__main__':

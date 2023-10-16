@@ -262,6 +262,8 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuArchive.menuAction())
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
+        self.rdMode = False
+        self.nightMode = False
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate

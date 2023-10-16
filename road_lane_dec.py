@@ -69,10 +69,6 @@ class RoadLaneDetect():
 
         # 新增中下方矩形 ROI 區域
         bottom_roi = np.array([[(width//4, height-50),(width//2, height *3//4), ((width*3)//4, height-50)]], np.int32)
-        cv2.polylines(frame, [bottom_roi], isClosed=True, color=(0, 0, 255), thickness=6)
-
-        # 將 ROI 定義為多邊形
-        roi_polygon = Polygon(bottom_roi[0])
 
         # 霍夫變換來偵測直線
         lines = cv2.HoughLinesP(roi_edges, 1, np.pi / 180, threshold=180, minLineLength=100, maxLineGap=50)
@@ -82,4 +78,4 @@ class RoadLaneDetect():
 
         # 合併虛線
         merged_lines = self.merge_lines(filtered_lines)
-        return roi_polygon, merged_lines
+        return bottom_roi, merged_lines
