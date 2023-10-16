@@ -7,6 +7,24 @@ from PyQt5 import QtWidgets
 import time
 import os
 
+initial_style = """QPushButton
+{
+   color:white;
+	background-color:black;
+	border:2px solid gray;
+}
+
+QPushButton:hover {
+background-color: rgba(165, 205, 255,70%);
+border:2px outset rgba(36, 36, 36,0);
+} 
+QPushButton:pressed {
+	background-color: rgba(220, 225, 255,90%);
+	border:4px outset rgba(36, 36, 36,0);
+}
+"""
+yellow_style = "background-color: yellow;"
+
 
 from UI import Ui_MainWindow
 from video_controller import video_controller
@@ -17,9 +35,14 @@ class MainWindow_controller(QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
         self.setup_control()
+        self.openrd = False
+        self.opennight = False
 
     def setup_control(self):
         self.ui.button_openfile.clicked.connect(self.open_file)    
+        self.ui.button_rd.clicked.connect(self.openroadlanedetect) 
+        self.ui.button_warning.clicked.connect(self.opennightdetect) 
+        
     #左、中、右警示圖示隱藏
     def disable_left_warning(self):
         self.warning_left.setHidden(True)
@@ -59,6 +82,20 @@ class MainWindow_controller(QMainWindow):
 
     def setslidervalue(self, value):
         self.ui.slider_videoframe.setValue(self.current_frame_no)
+    
+    def openroadlanedetect(self):
+        if self.openrd == False:
+            self.ui.button_rd.setStyleSheet(yellow_style)
+        else:
+            self.ui.button_rd.setStyleSheet(initial_style)
+        self.openrd = not self.openrd
+    
+    def opennightdetect(self):
+        if self.opennight == False:
+            self.ui.button_warning.setStyleSheet(yellow_style)
+        else:
+            self.ui.button_warning.setStyleSheet(initial_style)
+        self.opennight = not self.opennight
 
 
 

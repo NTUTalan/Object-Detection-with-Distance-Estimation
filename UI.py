@@ -27,10 +27,24 @@ class Ui_MainWindow(object):
         font.setFamily("Agency FB")
         font.setPointSize(24)
         self.button_stop.setFont(font)
-        self.button_stop.setStyleSheet("\n"
-"color:white;\n"
-"background-color:black;\n"
-"border:2px solid gray;")
+        self.button_stop.setStyleSheet("QPushButton\n"
+"{\n"
+"   color:white;\n"
+"    background-color:black;\n"
+"    border:2px solid gray;\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"background-color: rgba(165, 205, 255,70%);\n"
+"border:2px outset rgba(36, 36, 36,0);\n"
+"} \n"
+"QPushButton:pressed {\n"
+"    background-color: rgba(220, 225, 255,90%);\n"
+"    border:4px outset rgba(36, 36, 36,0);\n"
+"}\n"
+"\n"
+"\n"
+"")
         self.button_stop.setObjectName("button_stop")
         self.button_shot = QtWidgets.QPushButton(self.centralwidget)
         self.button_shot.setGeometry(QtCore.QRect(1010, 590, 131, 51))
@@ -38,12 +52,22 @@ class Ui_MainWindow(object):
         font.setFamily("Agency FB")
         font.setPointSize(24)
         self.button_shot.setFont(font)
-        self.button_shot.setStyleSheet("\n"
-"color:white;\n"
-"background-color:black;\n"
+        self.button_shot.setStyleSheet("QPushButton\n"
+"{\n"
+"   color:white;\n"
+"    background-color:black;\n"
+"    border:2px solid gray;\n"
+"}\n"
 "\n"
-"color:white;\n"
-"border:2px solid gray;\n"
+"QPushButton:hover {\n"
+"background-color: rgba(165, 205, 255,70%);\n"
+"border:2px outset rgba(36, 36, 36,0);\n"
+"} \n"
+"QPushButton:pressed {\n"
+"    background-color: rgba(220, 225, 255,90%);\n"
+"    border:4px outset rgba(36, 36, 36,0);\n"
+"}\n"
+"\n"
 "\n"
 "")
         self.button_shot.setObjectName("button_shot")
@@ -81,10 +105,24 @@ class Ui_MainWindow(object):
         font.setFamily("Agency FB")
         font.setPointSize(18)
         self.button_warning.setFont(font)
-        self.button_warning.setStyleSheet("\n"
-"color:white;\n"
-"background-color:black;\n"
-"border:2px solid gray;")
+        self.button_warning.setStyleSheet("QPushButton\n"
+"{\n"
+"   color:white;\n"
+"    background-color:black;\n"
+"    border:2px solid gray;\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"background-color: rgba(165, 205, 255,70%);\n"
+"border:2px outset rgba(36, 36, 36,0);\n"
+"} \n"
+"QPushButton:pressed {\n"
+"    background-color: rgba(220, 225, 255,90%);\n"
+"    border:4px outset rgba(36, 36, 36,0);\n"
+"}\n"
+"\n"
+"\n"
+"")
         self.button_warning.setObjectName("button_warning")
         self.button_rd = QtWidgets.QPushButton(self.centralwidget)
         self.button_rd.setGeometry(QtCore.QRect(604, 590, 191, 51))
@@ -92,10 +130,24 @@ class Ui_MainWindow(object):
         font.setFamily("Agency FB")
         font.setPointSize(18)
         self.button_rd.setFont(font)
-        self.button_rd.setStyleSheet("\n"
-"color:white;\n"
-"background-color:black;\n"
-"border:2px solid gray;")
+        self.button_rd.setStyleSheet("QPushButton\n"
+"{\n"
+"   color:white;\n"
+"    background-color:black;\n"
+"    border:2px solid gray;\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"background-color: rgba(165, 205, 255,70%);\n"
+"border:2px outset rgba(36, 36, 36,0);\n"
+"} \n"
+"QPushButton:pressed {\n"
+"    background-color: rgba(220, 225, 255,90%);\n"
+"    border:4px outset rgba(36, 36, 36,0);\n"
+"}\n"
+"\n"
+"\n"
+"")
         self.button_rd.setObjectName("button_rd")
         self.button_pause = QtWidgets.QPushButton(self.centralwidget)
         self.button_pause.setGeometry(QtCore.QRect(414, 590, 191, 51))
@@ -103,10 +155,24 @@ class Ui_MainWindow(object):
         font.setFamily("Agency FB")
         font.setPointSize(18)
         self.button_pause.setFont(font)
-        self.button_pause.setStyleSheet("\n"
-"color:white;\n"
-"background-color:black;\n"
-"border:2px solid gray;")
+        self.button_pause.setStyleSheet("QPushButton\n"
+"{\n"
+"   color:white;\n"
+"    background-color:black;\n"
+"    border:2px solid gray;\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"background-color: rgba(165, 205, 255,70%);\n"
+"border:2px outset rgba(36, 36, 36,0);\n"
+"} \n"
+"QPushButton:pressed {\n"
+"    background-color: rgba(220, 225, 255,90%);\n"
+"    border:4px outset rgba(36, 36, 36,0);\n"
+"}\n"
+"\n"
+"\n"
+"")
         self.button_pause.setObjectName("button_pause")
         self.button_play = QtWidgets.QPushButton(self.centralwidget)
         self.button_play.setGeometry(QtCore.QRect(44, 590, 191, 51))
@@ -114,12 +180,22 @@ class Ui_MainWindow(object):
         font.setFamily("Agency FB")
         font.setPointSize(24)
         self.button_play.setFont(font)
-        self.button_play.setStyleSheet("\n"
-"color:white;\n"
-"background-color:black;\n"
+        self.button_play.setStyleSheet("QPushButton\n"
+"{\n"
+"   color:white;\n"
+"    background-color:black;\n"
+"    border:2px solid gray;\n"
+"}\n"
 "\n"
-"color:white;\n"
-"border:2px solid gray;\n"
+"QPushButton:hover {\n"
+"background-color: rgba(165, 205, 255,70%);\n"
+"border:2px outset rgba(36, 36, 36,0);\n"
+"} \n"
+"QPushButton:pressed {\n"
+"    background-color: rgba(220, 225, 255,90%);\n"
+"    border:4px outset rgba(36, 36, 36,0);\n"
+"}\n"
+"\n"
 "\n"
 "")
         self.button_play.setObjectName("button_play")
@@ -131,19 +207,19 @@ class Ui_MainWindow(object):
         self.warning_left.setGeometry(QtCore.QRect(150, 70, 181, 151))
         self.warning_left.setStyleSheet("")
         self.warning_left.setText("")
-        self.warning_left.setPixmap(QtGui.QPixmap("resource/img/warning.png"))
+        self.warning_left.setPixmap(QtGui.QPixmap("../../qtresource/warning.png"))
         self.warning_left.setObjectName("warning_left")
         self.warning_middle = QtWidgets.QLabel(self.centralwidget)
         self.warning_middle.setHidden(True)
         self.warning_middle.setGeometry(QtCore.QRect(510, 70, 171, 151))
         self.warning_middle.setText("")
-        self.warning_middle.setPixmap(QtGui.QPixmap("resource/img/warning.png"))
+        self.warning_middle.setPixmap(QtGui.QPixmap("../../qtresource/warning.png"))
         self.warning_middle.setObjectName("warning_middle")
         self.warning_right = QtWidgets.QLabel(self.centralwidget)
         self.warning_right.setHidden(True)
         self.warning_right.setGeometry(QtCore.QRect(880, 70, 181, 151))
         self.warning_right.setText("")
-        self.warning_right.setPixmap(QtGui.QPixmap("resource/img/warning.png"))
+        self.warning_right.setPixmap(QtGui.QPixmap("../../qtresource/warning.png"))
         self.warning_right.setObjectName("warning_right")
         self.label_videoframe = QtWidgets.QLabel(self.centralwidget)
         self.label_videoframe.setGeometry(QtCore.QRect(50, 70, 1091, 511))
