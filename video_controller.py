@@ -131,7 +131,7 @@ class video_controller(object):
         for line in merged_lines:
             x1, y1, x2, y2 = line[0]
             line_coords = LineString([(x1, y1), (x2, y2)])
-            if roi_polygonhttps://youtu.be/r4WOus-2Nh0?si=AhWB0POic4htOQvM.intersects(line_coords):
+            if roi_polygon.intersects(line_coords):
                 cv2.putText(img, "Warning", (10, height - 10), cv2.FONT_HERSHEY_SIMPLEX, 5, (0, 0, 255), 8)
 
         # 繪製車道線
