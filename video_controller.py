@@ -48,16 +48,27 @@ class video_controller(object):
         # self.timer.start(1) # but if CPU can not decode as fast as fps, we set 1 (need decode time)
 
     def __get_frame_from_frame_no(self, frame_no):
-        self.setslidervalue(frame_no)
-        self.vc.set(1, frame_no)
-        ret, frame = self.vc.read()
-        self.ui.label_framecnt.setText(f"frame number: {frame_no}/{self.video_total_frame_count}")
-        polygon, lines = self.roadLaneDetector.detect(frame)
-        img, infos = self.detector.predict(frame, self.ui.nightMode)
-        if self.ui.rdMode:
-            img = self.PostRoadLane(img, lines, polygon)
-        self.warningUser(infos)
-        return img
+        webcam = False
+        if webcam:
+            cap = cv2.VideoCapture(0)
+            ret, frame = cap.read()
+            polygon, lines = self.roadLaneDetector.detect(frame)
+            img, infos = self.detector.predict(frame, self.ui.nightMode)
+            if self.ui.rdMode:
+                img = self.PostRoadLane(img, lines, polygon)
+            self.warningUser(infos)
+            return img
+        else:
+            self.setslidervalue(frame_no)
+            self.vc.set(1, frame_no)
+            ret, frame = self.vc.read()
+            self.ui.label_framecnt.setText(f"frame number: {frame_no}/{self.video_total_frame_count}")
+            polygon, lines = self.roadLaneDetector.detect(frame)
+            img, infos = self.detector.predict(frame, self.ui.nightMode)
+            if self.ui.rdMode:
+                img = self.PostRoadLane(img, lines, polygon)
+            self.warningUser(infos)
+            return img
     
     def __get_next_frame(self):
         ret, frame = self.vc.read();
@@ -120,7 +131,7 @@ class video_controller(object):
         for line in merged_lines:
             x1, y1, x2, y2 = line[0]
             line_coords = LineString([(x1, y1), (x2, y2)])
-            if roi_polygon.intersects(line_coords):
+            if roi_polygonhttps://youtu.be/r4WOus-2Nh0?si=AhWB0POic4htOQvM.intersects(line_coords):
                 cv2.putText(img, "Warning", (10, height - 10), cv2.FONT_HERSHEY_SIMPLEX, 5, (0, 0, 255), 8)
 
         # 繪製車道線
