@@ -4,9 +4,11 @@ from shapely.geometry import LineString, Polygon
 
 class RoadLaneDetect():
     def __init__(self):
-        self.lowcanny = 120
-        self.highcanny = 150
-        self.hough_threshold = 180
+        self.lowcanny = 60
+        self.highcanny = 120
+        self.hough_threshold = 220
+        self.minlinelength = 120
+        self.slope = 0.8
 
     def region_of_interest(self, img, vertices):
         mask = np.zeros_like(img)
@@ -59,7 +61,7 @@ class RoadLaneDetect():
         beta = 30    # 控制亮度
         adjusted = cv2.convertScaleAbs(blurred, alpha=alpha, beta=beta)
 
-        edges = cv2.Canny(adjusted, 120, 150)
+        edges = cv2.Canny(adjusted, self.lowcanny, self.highcanny)
         #cv2.imshow('edge',edges)
 
         # 選擇感興趣的區域
@@ -71,10 +73,10 @@ class RoadLaneDetect():
         bottom_roi = np.array([[(width//4, height-50),(width//2, height *3//4), ((width*3)//4, height-50)]], np.int32)
 
         # 霍夫變換來偵測直線
-        lines = cv2.HoughLinesP(roi_edges, 1, np.pi / 180, threshold=180, minLineLength=100, maxLineGap=50)
+        lines = cv2.HoughLinesP(roi_edges, 1, np.pi / 180, threshold=self.hough_threshold, minLineLength=self.minlinelength, maxLineGap=50)
 
         # 使用斜率篩選
-        filtered_lines = self.filter_lines(lines, slope_threshold=0.5)
+        filtered_lines = self.filter_lines(lines, slope_threshold=self.slope)
 
         # 合併虛線
         merged_lines = self.merge_lines(filtered_lines)
